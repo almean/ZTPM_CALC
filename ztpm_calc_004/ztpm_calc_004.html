@@ -1,0 +1,316 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZTPM_CALC_004</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZTPM_CALC_004</h2>
+<h3> Description: TPM Value Calculator Packet editor and scheduler</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;&nbsp;ZTPM_CALC_004<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+REPORT  ZTPM_CALC_004.<br />
+<br />
+include <a href ="ztpm_calc_types.html">ztpm_calc_types</a>.<br />
+include <a href ="ztpm_calc_classes.html">ztpm_calc_classes</a>.<br />
+<br />
+DATA: "Screen elements<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OK_CODE&nbsp;TYPE&nbsp;gui_func,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TXT_TARGET&nbsp;TYPE&nbsp;ztc_target,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TXT_MASTER_DSO&nbsp;TYPE&nbsp;ztc_master_dso,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TXT_INDEX_LIST&nbsp;TYPE&nbsp;indexid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TXT_PACKET_DESCRIPTION&nbsp;TYPE&nbsp;rstxtlg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TXT_JOB_NAME&nbsp;TYPE&nbsp;btcjob,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TXT_PACKET_ID&nbsp;TYPE&nbsp;ztc_packet_id,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHK_TEST&nbsp;TYPE&nbsp;c.<br />
+<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;go_packet&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zcl_tpm_packet,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;go_packet_list&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zcl_tpm_packet_list,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;go_packet_sel_edit&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zcl_tpm_packet_sel_edit,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;go_rule_list&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;zcl_tpm_rule_list.<br />
+<br />
+include <a href ="ztpm_calc_004_scr_mod.html">ztpm_calc_004_scr_mod</a>.<br />
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;go_packet.<br />
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;go_packet_list<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING&nbsp;container_name&nbsp;=&nbsp;'CONT_PACKET_LIST'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packet&nbsp;=&nbsp;go_packet.<br />
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;go_packet_sel_edit<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING&nbsp;container_name&nbsp;=&nbsp;'CONT_SELECTION'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packet&nbsp;=&nbsp;go_packet.<br />
+&nbsp;&nbsp;CREATE&nbsp;OBJECT&nbsp;go_rule_list<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING&nbsp;container_name&nbsp;=&nbsp;'CONT_RULE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packet&nbsp;=&nbsp;go_packet.<br />
+&nbsp;&nbsp;CALL&nbsp;SCREEN&nbsp;0100.<br />
+<br />
+END-OF-SELECTION.<br />
+<br />
+FORM replace_string.<br />
+<br />
+&nbsp;&nbsp;DATA&nbsp;ls_field&nbsp;TYPE&nbsp;sval.<br />
+&nbsp;&nbsp;DATA&nbsp;lt_fields&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;sval.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_original&nbsp;TYPE&nbsp;string.<br />
+&nbsp;&nbsp;DATA&nbsp;lv_new&nbsp;TYPE&nbsp;string.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;go_packet&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;ls_field-tabname&nbsp;=&nbsp;'D021T'.<br />
+&nbsp;&nbsp;ls_field-fieldname&nbsp;=&nbsp;'FLDN'.<br />
+&nbsp;&nbsp;ls_field-fieldtext&nbsp;=&nbsp;'Original'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_field&nbsp;TO&nbsp;lt_fields.<br />
+&nbsp;&nbsp;ls_field-tabname&nbsp;=&nbsp;'VXD021T'.<br />
+&nbsp;&nbsp;ls_field-fieldname&nbsp;=&nbsp;'FLDN'.<br />
+&nbsp;&nbsp;ls_field-fieldtext&nbsp;=&nbsp;'New'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_field&nbsp;TO&nbsp;lt_fields.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'POPUP_GET_VALUES'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_value_check&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;popup_title&nbsp;=&nbsp;'Find&nbsp;and&nbsp;Replace'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fields&nbsp;=&nbsp;lt_fields.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_fields&nbsp;INTO&nbsp;ls_field&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;lv_original&nbsp;=&nbsp;ls_field-value.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_fields&nbsp;INTO&nbsp;ls_field&nbsp;INDEX&nbsp;2.<br />
+&nbsp;&nbsp;lv_new&nbsp;=&nbsp;ls_field-value.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;lv_original&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;go_packet-&gt;find_replace(&nbsp;EXPORTING&nbsp;find&nbsp;=&nbsp;lv_original<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;replace_by&nbsp;=&nbsp;lv_new&nbsp;).<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+<br />
+FORM dropdown_redefine.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;update_index_dropdown.<br />
+&nbsp;&nbsp;IF&nbsp;TXT_MASTER_DSO&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;TXT_INDEX_LIST.<br />
+<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;go_packet-&gt;starter_restriction_initial(&nbsp;)&nbsp;=&nbsp;abap_true.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TXT_INDEX_LIST&nbsp;=&nbsp;'KEY'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TXT_INDEX_LIST&nbsp;=&nbsp;'SEL'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Update&nbsp;selection&nbsp;grid<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;go_packet_sel_edit-&gt;update_grid(&nbsp;index_type&nbsp;=&nbsp;TXT_INDEX_LIST&nbsp;).<br />
+<br />
+ENDFORM.<br />
+<br />
+FORM update_index_dropdown.<br />
+<br />
+&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_list&nbsp;TYPE&nbsp;vrm_values,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_item&nbsp;TYPE&nbsp;vrm_value,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_indexes&nbsp;TYPE&nbsp;rsd_t_odso_indx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_index&nbsp;TYPE&nbsp;rsd_s_odso_indx.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;TXT_MASTER_DSO&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;New&nbsp;first:&nbsp;already&nbsp;selected<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ls_item-key&nbsp;=&nbsp;'SEL'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_item-text&nbsp;=&nbsp;'Selectec&nbsp;infoobjects'(l03).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_item&nbsp;TO&nbsp;lt_list.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;First&nbsp;Keys<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ls_item-key&nbsp;=&nbsp;'KEY'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_item-text&nbsp;=&nbsp;'Key&nbsp;infoobjects'(l01).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_item&nbsp;TO&nbsp;lt_list.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;Get&nbsp;indexes<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;go_packet-&gt;get_master_dso_info(&nbsp;IMPORTING&nbsp;indexes&nbsp;=&nbsp;lt_indexes&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_indexes&nbsp;INTO&nbsp;ls_index.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_item-key&nbsp;=&nbsp;ls_index-indexid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_item-text&nbsp;=&nbsp;ls_index-indexid.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_item&nbsp;TO&nbsp;lt_list.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;Delta<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ls_item-key&nbsp;=&nbsp;'REQ'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_item-text&nbsp;=&nbsp;'Request&nbsp;Id&nbsp;(Delta)'(l04).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_item&nbsp;TO&nbsp;lt_list.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;Last&nbsp;ALL<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ls_item-key&nbsp;=&nbsp;'ALL'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_item-text&nbsp;=&nbsp;'All&nbsp;infoobjects'(l02).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_item&nbsp;TO&nbsp;lt_list.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'VRM_SET_VALUES'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;=&nbsp;'TXT_INDEX_LIST'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;values&nbsp;=&nbsp;lt_list.<br />
+<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*GUI&nbsp;Texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;MAIN&nbsp;--&gt;&nbsp;TPM&nbsp;Value&nbsp;Calculator&nbsp;Packet&nbsp;Editor&nbsp;and&nbsp;Scheduler<br />
+<br />
+*Text&nbsp;elements<br />
+*----------------------------------------------------------<br />
+*&nbsp;A01&nbsp;Yes<br />
+*&nbsp;A02&nbsp;No<br />
+*&nbsp;C01&nbsp;Infoobject<br />
+*&nbsp;C02&nbsp;From<br />
+*&nbsp;C03&nbsp;To<br />
+*&nbsp;C04&nbsp;Mult<br />
+*&nbsp;C05&nbsp;OLAP<br />
+*&nbsp;C06&nbsp;ABAP<br />
+*&nbsp;H01&nbsp;List&nbsp;of&nbsp;rules<br />
+*&nbsp;H02&nbsp;Define&nbsp;values&nbsp;for<br />
+*&nbsp;H03&nbsp;List&nbsp;of&nbsp;Requests<br />
+*&nbsp;I01&nbsp;The&nbsp;current&nbsp;rule&nbsp;will&nbsp;be&nbsp;saved<br />
+*&nbsp;I02&nbsp;The&nbsp;current&nbsp;rule&nbsp;will&nbsp;not&nbsp;be&nbsp;saved.&nbsp;Any&nbsp;unsaved&nbsp;change&nbsp;will&nbsp;be&nbsp;lost<br />
+*&nbsp;I03&nbsp;The&nbsp;packet&nbsp;will&nbsp;be&nbsp;overwritten<br />
+*&nbsp;I04&nbsp;Cancel&nbsp;the&nbsp;saving<br />
+*&nbsp;I05&nbsp;The&nbsp;current&nbsp;packet&nbsp;will&nbsp;be&nbsp;deleted<br />
+*&nbsp;I06&nbsp;The&nbsp;current&nbsp;packet&nbsp;will&nbsp;not&nbsp;be&nbsp;deleted<br />
+*&nbsp;L01&nbsp;Key&nbsp;infoobjects<br />
+*&nbsp;L02&nbsp;All&nbsp;infoobjects<br />
+*&nbsp;L03&nbsp;Selected&nbsp;infoobjects<br />
+*&nbsp;L04&nbsp;Request&nbsp;Id&nbsp;(Delta)<br />
+*&nbsp;Q01&nbsp;Want&nbsp;to&nbsp;save&nbsp;the&nbsp;current&nbsp;packet&nbsp;before&nbsp;continue?<br />
+*&nbsp;Q02&nbsp;The&nbsp;packet&nbsp;already&nbsp;exists.&nbsp;Overwrite?<br />
+*&nbsp;Q03&nbsp;Want&nbsp;to&nbsp;delete&nbsp;the&nbsp;current&nbsp;packet?<br />
+*&nbsp;T01&nbsp;New&nbsp;packet<br />
+*&nbsp;T02&nbsp;Copy&nbsp;packet<br />
+*&nbsp;T03&nbsp;Delete&nbsp;packet<br />
+*&nbsp;T04&nbsp;Export&nbsp;packet<br />
+*&nbsp;T05&nbsp;Import&nbsp;packet<br />
+*&nbsp;T06&nbsp;Add&nbsp;rule<br />
+*&nbsp;T07&nbsp;Remove&nbsp;rule<br />
+*&nbsp;TT1&nbsp;Save&nbsp;confimation<br />
+*&nbsp;TT2&nbsp;Packet&nbsp;already&nbsp;exists<br />
+*&nbsp;TT3&nbsp;Delete&nbsp;confimation<br />
+*&nbsp;TT4&nbsp;Export&nbsp;a&nbsp;packet<br />
+*&nbsp;TT5&nbsp;Import&nbsp;a&nbsp;packet<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;Hard&nbsp;coded<br />
+*&nbsp;&nbsp;&nbsp;To&nbsp;be&nbsp;implemented.<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;ZTPM_CALC<br />
+*004&nbsp;&nbsp;&nbsp;Calculation&nbsp;of&nbsp;&1:&nbsp;formula&nbsp;with&nbsp;parameter&nbsp;not&nbsp;defined.&nbsp;Replaced&nbsp;by&nbsp;0<br />
+*007&nbsp;&nbsp;&nbsp;The&nbsp;packet&nbsp;must&nbsp;have&nbsp;an&nbsp;ID<br />
+*008&nbsp;&nbsp;&nbsp;Schedule&nbsp;parameters&nbsp;are&nbsp;not&nbsp;defined<br />
+*009&nbsp;&nbsp;&nbsp;Job&nbsp;scheduled<br />
+*010&nbsp;&nbsp;&nbsp;Job&nbsp;can&nbsp;not&nbsp;start&nbsp;immediately<br />
+*011&nbsp;&nbsp;&nbsp;Invalid&nbsp;start&nbsp;date<br />
+*012&nbsp;&nbsp;&nbsp;Error&nbsp;when&nbsp;scheduling&nbsp;the&nbsp;job<br />
+*014&nbsp;&nbsp;&nbsp;Defined&nbsp;job&nbsp;parameters&nbsp;first<br />
+*015&nbsp;&nbsp;&nbsp;There&nbsp;is&nbsp;no&nbsp;more&nbsp;request&nbsp;to&nbsp;load&nbsp;in&nbsp;master&nbsp;DSO<br />
+*016&nbsp;&nbsp;&nbsp;Error&nbsp;in&nbsp;java&nbsp;&1&nbsp;(&2):&nbsp;&3<br />
+*018&nbsp;&nbsp;&nbsp;Adding&nbsp;rule&nbsp;&1<br />
+*019&nbsp;&nbsp;&nbsp;Reading&nbsp;master&nbsp;DSO&nbsp;&1.&nbsp;Requests&nbsp;newer&nbsp;than&nbsp;&2<br />
+*020&nbsp;&nbsp;&nbsp;Adding&nbsp;request&nbsp;&1<br />
+*021&nbsp;&nbsp;&nbsp;Adding&nbsp;filter&nbsp;&1<br />
+*022&nbsp;&nbsp;&nbsp;Quantity&nbsp;of&nbsp;records&nbsp;retrieved&nbsp;from&nbsp;master&nbsp;DSO&nbsp;&1:&nbsp;&2<br />
+*023&nbsp;&nbsp;&nbsp;Quantity&nbsp;of&nbsp;records&nbsp;saved&nbsp;in&nbsp;target&nbsp;DSO&nbsp;&1:&nbsp;&2<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2021. Sap Release 750</td>
+   </tr>
+</table>
+</body>
+</html>

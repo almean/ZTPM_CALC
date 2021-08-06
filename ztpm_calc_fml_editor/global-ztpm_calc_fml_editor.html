@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>LZTPM_CALCTOP</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: LZTPM_CALCTOP</h2>
+<h3> Description: Formula editor for TPM value calculator</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FUNCTION-POOL ZTPM_CALC.                    "MESSAGE-ID ..<br />
+<br />
+   </div>
+   <div class="codeComment">
+*****&nbsp;FOR&nbsp;SQL_INSTR<br />
+   </div>
+   <div class="code">
+TYPES:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BEGIN&nbsp;OF&nbsp;tp_dbtech_dso,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dso&nbsp;TYPE&nbsp;rsdodsobject,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tbl&nbsp;TYPE&nbsp;dbtabl,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;tp_dbtech_dso,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BEGIN&nbsp;OF&nbsp;tp_dbtech_iobj,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iobj&nbsp;TYPE&nbsp;rsiobjnm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fld&nbsp;&nbsp;TYPE&nbsp;rsdiobjfieldnm,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;tp_dbtech_iobj,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BEGIN&nbsp;OF&nbsp;tp_master_ref,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iobj_ref&nbsp;TYPE&nbsp;rsiobjnm,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;tp_master_ref,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp_tbl_master_ref&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;tp_master_ref.<br />
+<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_target&nbsp;&nbsp;TYPE&nbsp;rsdodsobject,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_rule_id&nbsp;TYPE&nbsp;rsruleid.<br />
+<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_rule_iobj&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;bapi6116io,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_dbtech_dso&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;tp_dbtech_dso,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_dbtech_iobj&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;tp_dbtech_iobj.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*****&nbsp;FOR&nbsp;FML_EDITOR<br />
+   </div>
+   <div class="code">
+TYPES:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp_filter_id(15)&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BEGIN&nbsp;OF&nbsp;tp_rule_filter,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dso&nbsp;&nbsp;TYPE&nbsp;rsdodsobject,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iobj&nbsp;TYPE&nbsp;rsiobjnm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seq&nbsp;&nbsp;TYPE&nbsp;tvarv_numb,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sign&nbsp;TYPE&nbsp;tvarv_sign,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opti&nbsp;TYPE&nbsp;tvarv_opti,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;low&nbsp;&nbsp;TYPE&nbsp;tvarv_val,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;high&nbsp;TYPE&nbsp;tvarv_val,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;tp_rule_filter,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp_tbl_rule_filter&nbsp;TYPE&nbsp;STANDARD&nbsp;TABLE&nbsp;OF&nbsp;tp_rule_filter&nbsp;WITH&nbsp;NON-UNIQUE&nbsp;DEFAULT&nbsp;KEY,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BEGIN&nbsp;OF&nbsp;tp_source_fields_gr,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dso&nbsp;&nbsp;&nbsp;TYPE&nbsp;rsdodsobject,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iobj&nbsp;&nbsp;TYPE&nbsp;rsiobjnm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txtlg&nbsp;TYPE&nbsp;rstxtlg,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;tp_source_fields_gr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BEGIN&nbsp;OF&nbsp;tp_source_filter_gr,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icon&nbsp;&nbsp;&nbsp;TYPE&nbsp;icon_d,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ichi&nbsp;&nbsp;&nbsp;TYPE&nbsp;icon_d,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dso&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rsdodsobject,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iobj&nbsp;&nbsp;&nbsp;TYPE&nbsp;rsiobjnm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;txtlg&nbsp;&nbsp;TYPE&nbsp;rstxtlg,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;act(4)&nbsp;TYPE&nbsp;c,<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;tp_source_filter_gr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BEGIN&nbsp;OF&nbsp;tp_formula_elem,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seq&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sytabix,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dso&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rsdodsobject,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iobj&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rsiobjnm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;operator(2)&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;constant&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sfbecnum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sfbecnum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameter&nbsp;&nbsp;&nbsp;TYPE&nbsp;sfbecnum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rstxtlg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sytabix,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sytabix,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tp_tbl_rule_filter,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;tp_formula_elem,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BEGIN&nbsp;OF&nbsp;tp_filter_def_param,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filter_id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tp_filter_id,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filter_src_dso&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rsdodsobject,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filter_src_iobj&nbsp;&nbsp;&nbsp;TYPE&nbsp;rsiobjnm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filter_seq&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tvarv_numb,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filter_sign&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tvarv_sign,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filter_opti&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tvarv_opti,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filter_low&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tvarv_val,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filter_high&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tvarv_val,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;tp_filter_def_param.<br />
+<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_tpm_target&nbsp;TYPE&nbsp;rsdodsobject,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_return&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;retcd,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_tabix&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sytabix.<br />
+<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_ct_editor_tech&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_custom_container,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_ct_editor_desc&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_custom_container,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_ct_source_fields&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_custom_container,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_ct_source_filter&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_custom_container,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_ct_buttons&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_custom_container.<br />
+<br />
+DATA c_ct_editor_filter TYPE REF TO cl_gui_custom_container.<br />
+DATA c_ed_editor_filter TYPE REF TO cl_gui_textedit.<br />
+<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_ed_editor_tech&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_textedit,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_ed_editor_desc&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_textedit,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_gr_source_fields&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_alv_grid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_gr_source_filter&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_alv_grid.<br />
+<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_tb_buttons&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_gui_toolbar,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gc_context_menu&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_ctmenu,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_posx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_posy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i.<br />
+<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_source_fields_cat&nbsp;TYPE&nbsp;lvc_t_fcat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_source_filter_cat&nbsp;TYPE&nbsp;lvc_t_fcat.<br />
+<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_source_fields_gr&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;tp_source_fields_gr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_source_filter_gr&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;tp_source_filter_gr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_rule_filter_act&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;tp_rule_filter,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_rule_filter_old&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;tp_rule_filter.<br />
+<br />
+DATA gt_source_filter_gr_old  TYPE TABLE OF tp_source_filter_gr.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rule_filter_act&nbsp;&nbsp;&nbsp;TYPE&nbsp;tp_rule_filter.<br />
+<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_formula_act&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;tp_formula_elem,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_formula_out&nbsp;TYPE&nbsp;ztpm_calc_t_fml.<br />
+<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RB_SOURCE_TARGET&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RB_SOURCE_DSO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TXT_ACTUAL_ELEMENT&nbsp;&nbsp;TYPE&nbsp;sfbecnum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TXT_SOURCE_DSO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rsdodsobject,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_iobj&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rsiobjnm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_desc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rstxtlg.<br />
+<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;i.<br />
+<br />
+DATA gv_edit_state TYPE c.<br />
+<br />
+<br />
+DATA c_ct_operator TYPE REF TO cl_gui_custom_container.<br />
+DATA c_tb_operator TYPE REF TO cl_gui_toolbar.<br />
+DATA c_ct_element TYPE REF TO cl_gui_custom_container.<br />
+DATA c_tb_element TYPE REF TO cl_gui_toolbar.<br />
+<br />
+DEFINE edit_cat.<br />
+<br />
+&nbsp;&nbsp;CLEAR&nbsp;ls_cat.<br />
+&nbsp;&nbsp;ls_cat-fieldname&nbsp;=&nbsp;&1.<br />
+&nbsp;&nbsp;ls_cat-inttype&nbsp;&nbsp;&nbsp;=&nbsp;&2.<br />
+&nbsp;&nbsp;ls_cat-outputlen&nbsp;=&nbsp;&3.<br />
+&nbsp;&nbsp;ls_cat-coltext&nbsp;&nbsp;&nbsp;=&nbsp;&4.<br />
+&nbsp;&nbsp;ls_cat-seltext&nbsp;&nbsp;&nbsp;=&nbsp;&4.<br />
+<br />
+END-OF-DEFINITION.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2021. Sap Release 750</td>
+   </tr>
+</table>
+</body>
+</html>

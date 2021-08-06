@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZTPM_CALC_PACKET_DEEP</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZTPM_CALC_PACKET_DEEP</h2>
+<h3> Description: TPM Value Calculator Deep packet transformation</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+&lt;?sap.transform simple?&gt;<br />
+&lt;tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary" xmlns:def="http://www.sap.com/abapxml/types/defined"&gt;<br />
+&lt;tt:root name="PACKET" type="ddic:ZTPM_CALC_PACKET"/&gt;<br />
+&lt;tt:template&gt;<br />
+&lt;PACKET&gt;<br />
+&lt;ID tt:value-ref=".PACKET.ID"/&gt;<br />
+&lt;DESCRIPTION tt:value-ref=".PACKET.DESCRIPTION"/&gt;<br />
+&lt;MASTER_DSO tt:value-ref=".PACKET.MASTER_DSO"/&gt;<br />
+&lt;TARGET tt:value-ref=".PACKET.TARGET"/&gt;<br />
+&lt;JOB_NAME tt:value-ref=".PACKET.JOB_NAME"/&gt;<br />
+&lt;JOB_OPTIONS&gt;<br />
+&lt;SDLSTRTDT tt:value-ref=".PACKET.JOB_OPTIONS.SDLSTRTDT"/&gt;<br />
+&lt;SDLSTRTTM tt:value-ref=".PACKET.JOB_OPTIONS.SDLSTRTTM"/&gt;<br />
+&lt;LASTSTRTDT tt:value-ref=".PACKET.JOB_OPTIONS.LASTSTRTDT"/&gt;<br />
+&lt;LASTSTRTTM tt:value-ref=".PACKET.JOB_OPTIONS.LASTSTRTTM"/&gt;<br />
+&lt;PREDJOB tt:value-ref=".PACKET.JOB_OPTIONS.PREDJOB"/&gt;<br />
+&lt;PREDJOBCNT tt:value-ref=".PACKET.JOB_OPTIONS.PREDJOBCNT"/&gt;<br />
+&lt;CHECKSTAT tt:value-ref=".PACKET.JOB_OPTIONS.CHECKSTAT"/&gt;<br />
+&lt;EVENTID tt:value-ref=".PACKET.JOB_OPTIONS.EVENTID"/&gt;<br />
+&lt;EVENTPARM tt:value-ref=".PACKET.JOB_OPTIONS.EVENTPARM"/&gt;<br />
+&lt;STARTDTTYP tt:value-ref=".PACKET.JOB_OPTIONS.STARTDTTYP"/&gt;<br />
+&lt;PRDMINS tt:value-ref=".PACKET.JOB_OPTIONS.PRDMINS"/&gt;<br />
+&lt;PRDHOURS tt:value-ref=".PACKET.JOB_OPTIONS.PRDHOURS"/&gt;<br />
+&lt;PRDDAYS tt:value-ref=".PACKET.JOB_OPTIONS.PRDDAYS"/&gt;<br />
+&lt;PRDWEEKS tt:value-ref=".PACKET.JOB_OPTIONS.PRDWEEKS"/&gt;<br />
+&lt;PRDMONTHS tt:value-ref=".PACKET.JOB_OPTIONS.PRDMONTHS"/&gt;<br />
+&lt;PERIODIC tt:value-ref=".PACKET.JOB_OPTIONS.PERIODIC"/&gt;<br />
+&lt;INSTNAME tt:value-ref=".PACKET.JOB_OPTIONS.INSTNAME"/&gt;<br />
+&lt;CALENDARID tt:value-ref=".PACKET.JOB_OPTIONS.CALENDARID"/&gt;<br />
+&lt;EOMCORRECT tt:value-ref=".PACKET.JOB_OPTIONS.EOMCORRECT"/&gt;<br />
+&lt;CALCORRECT tt:value-ref=".PACKET.JOB_OPTIONS.CALCORRECT"/&gt;<br />
+&lt;IMSTRTPOS tt:value-ref=".PACKET.JOB_OPTIONS.IMSTRTPOS"/&gt;<br />
+&lt;PRDBEHAV tt:value-ref=".PACKET.JOB_OPTIONS.PRDBEHAV"/&gt;<br />
+&lt;WDAYNO tt:value-ref=".PACKET.JOB_OPTIONS.WDAYNO"/&gt;<br />
+&lt;WDAYCDIR tt:value-ref=".PACKET.JOB_OPTIONS.WDAYCDIR"/&gt;<br />
+&lt;NOTBEFORE tt:value-ref=".PACKET.JOB_OPTIONS.NOTBEFORE"/&gt;<br />
+&lt;/JOB_OPTIONS&gt;<br />
+&lt;STARTER_RESTRICTIONS&gt;<br />
+&lt;tt:loop ref=".PACKET.STARTER_RESTRICTIONS"&gt;<br />
+&lt;ZTPM_CALC_RESTRICTION&gt;<br />
+&lt;DSO tt:value-ref="DSO"/&gt;<br />
+&lt;IOBJ tt:value-ref="IOBJ"/&gt;<br />
+&lt;FIELDNAME tt:value-ref="FIELDNAME"/&gt;<br />
+&lt;SELECTIONS&gt;<br />
+&lt;tt:loop ref="SELECTIONS"&gt;<br />
+&lt;ZTPM_CALC_SELECTION&gt;<br />
+&lt;SIGN tt:value-ref="SIGN"/&gt;<br />
+&lt;OPTION tt:value-ref="OPTION"/&gt;<br />
+&lt;LOW tt:value-ref="LOW"/&gt;<br />
+&lt;HIGH tt:value-ref="HIGH"/&gt;<br />
+&lt;/ZTPM_CALC_SELECTION&gt;<br />
+&lt;/tt:loop&gt;<br />
+&lt;/SELECTIONS&gt;<br />
+&lt;/ZTPM_CALC_RESTRICTION&gt;<br />
+&lt;/tt:loop&gt;<br />
+&lt;/STARTER_RESTRICTIONS&gt;<br />
+&lt;RULESID&gt;<br />
+&lt;tt:loop ref=".PACKET.RULESID"&gt;<br />
+&lt;ZTPM_CALC_RULE_ID&gt;<br />
+&lt;ID tt:value-ref="ID"/&gt;<br />
+&lt;DESCRIPTION tt:value-ref="DESCRIPTION"/&gt;<br />
+&lt;TARGET tt:value-ref="TARGET"/&gt;<br />
+&lt;MASTER_DSO tt:value-ref="MASTER_DSO"/&gt;<br />
+&lt;/ZTPM_CALC_RULE_ID&gt;<br />
+&lt;/tt:loop&gt;<br />
+&lt;/RULESID&gt;<br />
+&lt;/PACKET&gt;<br />
+&lt;/tt:template&gt;<br />
+&lt;/tt:transform&gt;<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2021. Sap Release 750</td>
+   </tr>
+</table>
+</body>
+</html>
