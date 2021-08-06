@@ -1,0 +1,495 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZTPM_CALC_003_FUNCTIONALITIES</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZTPM_CALC_003_FUNCTIONALITIES</h2>
+<h3> Description: Include ZTPM_CALC_003_FUNCTIONALITIES</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FORM get_function_type.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;functype&nbsp;FROM&nbsp;ztpm_calc_fct<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;gv_actual_type<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;funcname&nbsp;=&nbsp;gv_actual_function.<br />
+<br />
+ENDFORM.<br />
+<br />
+FORM activate_abap.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DEFINE&nbsp;al.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;&1&nbsp;TO&nbsp;&2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;END-OF-DEFINITION.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_funcs&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ztpm_calc_fct,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_func_code&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ztpm_calc_fctjs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func_code&nbsp;TYPE&nbsp;ztpm_calc_fctjs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_func_param&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ztpm_calc_fctcp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_func_param&nbsp;TYPE&nbsp;ztpm_calc_fctcp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_line&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_funcname(30)&nbsp;TYPE&nbsp;c,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_program&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_class&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_mess&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_temp&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_sid&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_definition&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_implementation&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_program&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_line_java&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_code_java&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_java&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_len&nbsp;TYPE&nbsp;i.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;ztpm_calc_fct<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;lt_funcs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;functype&nbsp;=&nbsp;'A'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;ztpm_calc_fctjs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;lt_func_code<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;lt_funcs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;funcname&nbsp;=&nbsp;lt_funcs-funcname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_func_code&nbsp;BY&nbsp;funcname&nbsp;sequence.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;ztpm_calc_fctcp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;lt_func_param<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;lt_funcs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;funcname&nbsp;=&nbsp;lt_funcs-funcname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;lt_func_param&nbsp;BY&nbsp;funcname&nbsp;sequence.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_func_param&nbsp;INTO&nbsp;ls_func_param.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_func_param-sequence&nbsp;=&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-tabix&nbsp;&gt;&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_line&nbsp;=&nbsp;','.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;al&nbsp;lv_line&nbsp;lt_definition.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_funcname&nbsp;=&nbsp;ls_func_param-component.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;lv_funcname&nbsp;'IMPORTING'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_line&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;ls_func_param-component&nbsp;NA&nbsp;',.()'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;lv_line&nbsp;ls_func_param-component&nbsp;'TYPE&nbsp;string'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_line&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;al&nbsp;lv_line&nbsp;lt_definition.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;lv_line.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AT&nbsp;END&nbsp;OF&nbsp;funcname.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_line&nbsp;=&nbsp;'RETURNING&nbsp;VALUE(return)&nbsp;TYPE&nbsp;string'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;al&nbsp;lv_line&nbsp;lt_definition.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDAT.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_line&nbsp;=&nbsp;'.'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;lv_line&nbsp;TO&nbsp;lt_definition.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_func_code&nbsp;INTO&nbsp;ls_func_code.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AT&nbsp;NEW&nbsp;funcname.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_func_param&nbsp;INTO&nbsp;ls_func_param<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;funcname&nbsp;=&nbsp;ls_func_code-funcname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'METHOD'&nbsp;ls_func_param-component<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_line&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;lv_line&nbsp;'.'&nbsp;INTO&nbsp;lv_line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;al&nbsp;lv_line&nbsp;lt_implementation.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDAT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_line&nbsp;=&nbsp;ls_func_code-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;al&nbsp;lv_line&nbsp;lt_implementation.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AT&nbsp;END&nbsp;OF&nbsp;funcname.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_line&nbsp;=&nbsp;'ENDMETHOD.'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;al&nbsp;lv_line&nbsp;lt_implementation.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDAT.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;al&nbsp;'*&nbsp;Don&nbsp;not&nbsp;change&nbsp;this&nbsp;include.'&nbsp;lt_program.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;al&nbsp;'*&nbsp;It&nbsp;is&nbsp;created&nbsp;automatically&nbsp;usign&nbsp;program&nbsp;ZTPM_CALC_003'&nbsp;lt_program.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;al&nbsp;'CLASS&nbsp;ztpm_calc_abap_func&nbsp;DEFINITION.'&nbsp;lt_program.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;al&nbsp;'&nbsp;&nbsp;PUBLIC&nbsp;SECTION.'&nbsp;lt_program.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;al&nbsp;'&nbsp;&nbsp;&nbsp;&nbsp;METHODS:'&nbsp;lt_program.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;LINES&nbsp;OF&nbsp;lt_definition&nbsp;TO&nbsp;lt_program.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;al&nbsp;'ENDCLASS.'&nbsp;lt_program.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;al&nbsp;'CLASS&nbsp;ztpm_calc_abap_func&nbsp;IMPLEMENTATION.'&nbsp;lt_program.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;LINES&nbsp;OF&nbsp;lt_implementation&nbsp;TO&nbsp;lt_program.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;al&nbsp;'ENDCLASS.'&nbsp;lt_program.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INSERT&nbsp;REPORT&nbsp;'ZTPM_CALC_ABAP_FUNC'&nbsp;FROM&nbsp;lt_program.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;GENERATE&nbsp;SUBROUTINE&nbsp;POOL&nbsp;lt_program&nbsp;NAME&nbsp;lv_program<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;lv_mess<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHORTDUMP-ID&nbsp;lv_sid.<br />
+<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;'\PROGRAM='&nbsp;lv_program&nbsp;'\CLASS=ZTPM_CALC_FUNC'&nbsp;INTO&nbsp;lv_class.<br />
+<br />
+   </div>
+   <div class="code">
+ENDFORM.<br />
+<br />
+FORM init_function.<br />
+<br />
+&nbsp;&nbsp;CLEAR:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_structure[].<br />
+&nbsp;&nbsp;TXT_FUNCTION_NAME&nbsp;=&nbsp;gv_actual_function.<br />
+&nbsp;&nbsp;PERFORM&nbsp;init_code.<br />
+&nbsp;&nbsp;PERFORM&nbsp;init_structure.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;init_abap_instr.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;gv_actual_function&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;get_db_data.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM. "init_function<br />
+<br />
+FORM save_db_data.<br />
+<br />
+&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fct&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ztpm_calc_fct,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fctcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ztpm_calc_fctcp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fctcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ztpm_calc_fctcp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_structure&nbsp;TYPE&nbsp;tp_structure,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fctjs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ztpm_calc_fctjs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fctjs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ztpm_calc_fctjs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_string&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;char255,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_line&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char255.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;gv_actual_function&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gv_actual_function&nbsp;=&nbsp;TXT_FUNCTION_NAME.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;gv_actual_function&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;W022(SAP_NWBC)&nbsp;WITH&nbsp;'Function&nbsp;name'(801).<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;Field&nbsp;&1&nbsp;is&nbsp;mandatory<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;FUNCTION<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ls_fct-funcname&nbsp;=&nbsp;gv_actual_function.<br />
+&nbsp;&nbsp;ls_fct-functype&nbsp;=&nbsp;gv_actual_type.<br />
+&nbsp;&nbsp;MODIFY&nbsp;ztpm_calc_fct&nbsp;FROM&nbsp;ls_fct.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;STRUCTURE<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;gc_structure_alv&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gc_structure_alv-&gt;check_changed_data(&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_structure&nbsp;INTO&nbsp;ls_structure.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fctcp-funcname&nbsp;&nbsp;=&nbsp;gv_actual_function.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fctcp-sequence&nbsp;&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fctcp-component&nbsp;=&nbsp;ls_structure-component.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_fctcp&nbsp;TO&nbsp;lt_fctcp.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;ztpm_calc_fctcp&nbsp;WHERE&nbsp;funcname&nbsp;=&nbsp;gv_actual_function.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;ztpm_calc_fctcp&nbsp;FROM&nbsp;TABLE&nbsp;lt_fctcp.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;CODE<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;gc_code_editor&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;gc_code_editor-&gt;get_text_as_r3table&nbsp;"get_text_as_stream<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;lt_string.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;=&nbsp;lt_string.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_string&nbsp;INTO&nbsp;ls_line.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fctjs-funcname&nbsp;=&nbsp;gv_actual_function.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fctjs-sequence&nbsp;=&nbsp;sy-tabix.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fctjs-line&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_fctjs&nbsp;TO&nbsp;lt_fctjs.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;ztpm_calc_fctjs&nbsp;WHERE&nbsp;funcname&nbsp;=&nbsp;gv_actual_function.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;ztpm_calc_fctjs&nbsp;FROM&nbsp;TABLE&nbsp;lt_fctjs.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;IF&nbsp;gv_actual_type&nbsp;=&nbsp;'A'.&nbsp;"ABAP,&nbsp;activate&nbsp;the&nbsp;code.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;activate_abap.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.<br />
+<br />
+FORM get_db_data.<br />
+<br />
+&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fctcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ztpm_calc_fctcp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fctcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ztpm_calc_fctcp,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_structure&nbsp;TYPE&nbsp;tp_structure,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fctjs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ztpm_calc_fctjs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fctjs&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ztpm_calc_fctjs,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_string&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;char255,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_line&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char255.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;STRUCTURE<br />
+*&nbsp;CODE<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;gv_actual_function&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;CLEAR&nbsp;gt_structure[].<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;ztpm_calc_fctcp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;lt_fctcp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;funcname&nbsp;=&nbsp;gv_actual_function.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_fctcp&nbsp;INTO&nbsp;ls_fctcp.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_structure-component&nbsp;=&nbsp;ls_fctcp-component.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_structure&nbsp;TO&nbsp;gt_structure.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;gc_structure_alv-&gt;refresh_table_display(&nbsp;).<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;ztpm_calc_fctjs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;lt_fctjs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;funcname&nbsp;=&nbsp;gv_actual_function.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_fctjs&nbsp;INTO&nbsp;ls_fctjs.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_line&nbsp;=&nbsp;ls_fctjs-line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_line&nbsp;TO&nbsp;lt_string.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;gc_code_editor-&gt;set_text_as_r3table&nbsp;"set_text_as_stream<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table&nbsp;=&nbsp;lt_string.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;=&nbsp;lt_string.<br />
+<br />
+   </div>
+   <div class="code">
+ENDFORM.<br />
+<br />
+FORM check_syntax.<br />
+<br />
+&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_script&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_string&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;char255,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_line&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;char255,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lo_java_processor&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;cl_java_script.&nbsp;"#EC&nbsp;NEEDED<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;gc_code_editor-&gt;get_text_as_stream<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;=&nbsp;lt_string.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_string&nbsp;INTO&nbsp;ls_line.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;lv_script&nbsp;ls_line&nbsp;INTO&nbsp;lv_script.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.&nbsp;"AT&nbsp;lt_string&nbsp;INTO&nbsp;ls_line.<br />
+&nbsp;&nbsp;IF&nbsp;lv_script&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;lo_java_processor&nbsp;=&nbsp;cl_java_script=&gt;create(&nbsp;).<br />
+&nbsp;&nbsp;lo_java_processor-&gt;compile(&nbsp;script_name&nbsp;=&nbsp;'check'&nbsp;script&nbsp;=&nbsp;lv_script&nbsp;).<br />
+&nbsp;&nbsp;IF&nbsp;lo_java_processor-&gt;last_condition_code&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;I131(37).<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;No&nbsp;syntax&nbsp;errors&nbsp;found<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;I800(CHK_BSP)&nbsp;WITH&nbsp;lo_java_processor-&gt;last_error_message.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;Syntax&nbsp;error:&nbsp;&&nbsp;&&nbsp;&&nbsp;&<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM. "check_syntax.<br />
+<br />
+FORM init_code.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;init_ctrl_code.<br />
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;gc_code_editor&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gc_code_editor-&gt;set_textstream(&nbsp;text&nbsp;=&nbsp;''&nbsp;).<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM. "init_code<br />
+<br />
+FORM init_structure.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;init_ctrl_structure.<br />
+<br />
+ENDFORM. "init_structure<br />
+<br />
+FORM init_abap_instr.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;init_ctrl_abap_instr.<br />
+<br />
+ENDFORM. "init_structure<br />
+<br />
+FORM init_list_functions.<br />
+<br />
+&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_fct&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ztpm_calc_fct,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_fct&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ztpm_calc_fct,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_nodekey&nbsp;&nbsp;TYPE&nbsp;tm_nodekey,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_nodetxt&nbsp;&nbsp;TYPE&nbsp;tm_nodetxt,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_icon&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tv_image.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;init_ctrl_list_functions.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;LIST&nbsp;CONTENT<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gc_list_functions_list-&gt;delete_all_nodes(&nbsp;).<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;ztpm_calc_fct<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;lt_fct.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_fct&nbsp;INTO&nbsp;ls_fct.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;ls_fct-functype.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'J'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_icon&nbsp;=&nbsp;'@RK@'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'A'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_icon&nbsp;=&nbsp;'@9V@'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;OTHERS.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_nodekey&nbsp;&nbsp;=&nbsp;ls_fct-funcname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lv_nodetxt&nbsp;=&nbsp;ls_fct-funcname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;gc_list_functions_list-&gt;add_node<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node_key&nbsp;=&nbsp;lv_nodekey<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;isfolder&nbsp;=&nbsp;'&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;image&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_icon&nbsp;"'@36@'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_nodetxt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;1.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.<br />
+<br />
+FORM adjust_by_type.<br />
+<br />
+&nbsp;&nbsp;CASE&nbsp;gv_actual_type.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'J'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_subscreen&nbsp;=&nbsp;0102.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ICON_TYPE&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ICON_WD_WEB_APPL_PROJECT.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'A'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_subscreen&nbsp;=&nbsp;0101.&nbsp;"Now&nbsp;use&nbsp;the&nbsp;same&nbsp;screen<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gv_subscreen&nbsp;=&nbsp;0102.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ICON_TYPE&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ICON_ABAP_LOCAL.<br />
+<br />
+&nbsp;&nbsp;ENDCASE.<br />
+<br />
+ENDFORM. "adjust_by_type<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2021. Sap Release 750</td>
+   </tr>
+</table>
+</body>
+</html>
