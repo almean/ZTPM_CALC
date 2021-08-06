@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZTPM_CALC_ABAP_FUNC</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZTPM_CALC_ABAP_FUNC</h2>
+<h3> Description: Include ZTPM_CALC_ABAP_FUNC</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&nbsp;Don&nbsp;not&nbsp;change&nbsp;this&nbsp;include.<br />
+*&nbsp;It&nbsp;is&nbsp;created&nbsp;automatically&nbsp;usign&nbsp;program&nbsp;ZTPM_CALC_003<br />
+   </div>
+   <div class="code">
+CLASS ztpm_calc_abap_func DEFINITION.<br />
+&nbsp;&nbsp;PUBLIC&nbsp;SECTION.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;METHODS:<br />
+GET_ATTRIBUTE IMPORTING CHARACTERISTIC TYPE string<br />
+&nbsp;VALUE&nbsp;TYPE&nbsp;string<br />
+&nbsp;ATTRIBUTE&nbsp;TYPE&nbsp;string<br />
+RETURNING VALUE(return) TYPE string<br />
+,<br />
+get_text IMPORTING infoobject TYPE string<br />
+&nbsp;key_value&nbsp;TYPE&nbsp;string<br />
+&nbsp;text_size_s_m_l&nbsp;TYPE&nbsp;string<br />
+&nbsp;country&nbsp;TYPE&nbsp;string<br />
+RETURNING VALUE(return) TYPE string<br />
+.<br />
+ENDCLASS.<br />
+CLASS ztpm_calc_abap_func IMPLEMENTATION.<br />
+METHOD GET_ATTRIBUTE.<br />
+DATA:<br />
+&nbsp;&nbsp;lv_iobj&nbsp;TYPE&nbsp;rsdiobj-iobjnm,<br />
+&nbsp;&nbsp;lv_attr&nbsp;TYPE&nbsp;rsdbchatr-attrinm,<br />
+&nbsp;&nbsp;lv_content&nbsp;TYPE&nbsp;rsgeneral-chavl,<br />
+&nbsp;&nbsp;lv_return(100)&nbsp;TYPE&nbsp;c.<br />
+&nbsp;&nbsp;lv_iobj&nbsp;=&nbsp;characteristic.<br />
+&nbsp;&nbsp;lv_attr&nbsp;=&nbsp;attribute.<br />
+&nbsp;&nbsp;lv_content&nbsp;=&nbsp;value.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'RSAU_READ_MASTER_DATA'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_iobjnm&nbsp;=&nbsp;lv_iobj<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_chavl&nbsp;=&nbsp;lv_content<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_attrnm&nbsp;=&nbsp;lv_attr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_attrval&nbsp;=&nbsp;lv_return<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ_ERROR&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO_SUCH_ATTRIBUTE&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRONG_IMPORT_PARAMETERS&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHAVL_NOT_FOUND&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;5.<br />
+IF sy-subrc = 0.<br />
+return = lv_return.<br />
+ENDIF.<br />
+ENDMETHOD.<br />
+METHOD get_text.<br />
+DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_iobj&nbsp;TYPE&nbsp;rsd_iobjnm,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_chavl&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;rsdm_s_chavlinfo<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;c_chavl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_chavl&nbsp;TYPE&nbsp;rsdm_s_chavlinfo,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_langu&nbsp;TYPE&nbsp;sylangu.<br />
+<br />
+lv_iobj = infoobject.<br />
+ls_chavl-c_chavl = key_value.<br />
+ls_chavl-c_niobjnm = infoobject.<br />
+APPEND ls_chavl TO lt_chavl.<br />
+IF country = 'BR'.<br />
+<br />
+&nbsp;&nbsp;lv_langu&nbsp;=&nbsp;'P'.<br />
+<br />
+ELSE.<br />
+<br />
+&nbsp;&nbsp;lv_langu&nbsp;=&nbsp;'S'.<br />
+<br />
+ENDIF.<br />
+<br />
+CALL FUNCTION 'RSD_CHAVL_READ_ALL'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_langu&nbsp;=&nbsp;lv_langu<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_iobjnm&nbsp;=&nbsp;lv_iobj<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_sid_in&nbsp;=&nbsp;'&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c_t_chavlinfo&nbsp;=&nbsp;lt_chavl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INFO_OBJECT_NOT_FOUND&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ROUTINES_GENERATION_ERROR&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHECK_TABLE_NOT_EXISTING&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TEXT_TABLE_NOT_EXISTING&nbsp;=&nbsp;4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INHERITED_ERROR&nbsp;=&nbsp;5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;=&nbsp;6.<br />
+IF sy-subrc &lt;&gt; 0.<br />
+&nbsp;&nbsp;CLEAR&nbsp;return.<br />
+&nbsp;&nbsp;EXIT.<br />
+ENDIF.<br />
+<br />
+IF lt_chavl[] IS INITIAL.<br />
+&nbsp;&nbsp;EXIT.<br />
+ENDIF.<br />
+READ TABLE lt_chavl INTO ls_chavl INDEX 1.<br />
+IF text_size_s_m_l = 'L'.<br />
+<br />
+&nbsp;&nbsp;return&nbsp;=&nbsp;ls_chavl-e_chatexts-txtlg.<br />
+<br />
+ELSEIF text_size_s_m_l = 'M'.<br />
+<br />
+&nbsp;&nbsp;return&nbsp;=&nbsp;ls_chavl-e_chatexts-txtmd.<br />
+<br />
+ELSE.<br />
+<br />
+&nbsp;&nbsp;return&nbsp;=&nbsp;ls_chavl-e_chatexts-txtsh.<br />
+<br />
+ENDIF.<br />
+ENDMETHOD.<br />
+ENDCLASS.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2021. Sap Release 750</td>
+   </tr>
+</table>
+</body>
+</html>

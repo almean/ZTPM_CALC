@@ -1,0 +1,410 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZTPM_CALC_001_TASKS</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZTPM_CALC_001_TASKS</h2>
+<h3> Description: Include ZTPM_CALC_001_TASKS</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+FORM save.<br />
+<br />
+&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_calc_links&nbsp;TYPE&nbsp;ztpm_calc_links,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_links&nbsp;TYPE&nbsp;rsng_t_links.<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;links_organize.<br />
+&nbsp;&nbsp;PERFORM&nbsp;convert_links&nbsp;USING&nbsp;lt_links<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHANGING&nbsp;lt_calc_links.<br />
+&nbsp;&nbsp;go_tpm_rule-&gt;set_links(&nbsp;links&nbsp;=&nbsp;&nbsp;lt_calc_links&nbsp;).<br />
+&nbsp;&nbsp;go_tpm_rule-&gt;save(&nbsp;).<br />
+&nbsp;&nbsp;MESSAGE&nbsp;I605(01).<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;DATA:<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_calc_rulset&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ztpm_calc_rulset,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulset&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ztpm_calc_rulset,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_calc_ruldef&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ztpm_calc_ruldef,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_ruldef&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ztpm_calc_ruldef,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ruldeffil&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tp_ruldeffil,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rulrul&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tp_rulrul,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rulfml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ztpm_calc_s_fml_elem,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rulfil&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ztpm_calc_s_fml_elem_filter,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_calc_rulrul&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ztpm_calc_rulrul,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulrul&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ztpm_calc_rulrul,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_calc_rulfml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ztpm_calc_rulfml,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ztpm_calc_rulfml,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_calc_rulfil&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ztpm_calc_rulfil,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfil&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ztpm_calc_rulfil,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lrt_fml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;RANGE&nbsp;OF&nbsp;cme_formula_ui,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lrs_fml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;lrt_fml,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;sysuuid_25,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_links&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rsng_t_links,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_link&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rsng_s_links,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lc_table&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;if_rsnetgraphic_table,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_row&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rsng_rownr,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_rullnk_dso_tbl&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;tp_rullnk_dso_tbl,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rullnk_dso_tbl&nbsp;&nbsp;&nbsp;TYPE&nbsp;tp_rullnk_dso_tbl,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ztpm_calc_rullnk&nbsp;TYPE&nbsp;ztpm_calc_rullnk,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_ztpm_calc_rullnk&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ztpm_calc_rullnk.<br />
+*<br />
+**-------<br />
+**&nbsp;Check&nbsp;for&nbsp;mandatory&nbsp;fields<br />
+*&nbsp;&nbsp;IF&nbsp;TXT_SET_RULES_ID&nbsp;IS&nbsp;INITIAL.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;W022(SAP_NWBC)&nbsp;WITH&nbsp;'Rule&nbsp;Id'(801).<br />
+**&nbsp;&nbsp;&nbsp;Field&nbsp;&1&nbsp;is&nbsp;mandatory<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+*<br />
+*&nbsp;&nbsp;ENDIF.<br />
+**&nbsp;a1)&nbsp;Save&nbsp;rules<br />
+**&nbsp;ZTPM_CALC_RUL<br />
+*&nbsp;&nbsp;CLEAR&nbsp;lt_calc_rulset[].<br />
+*&nbsp;&nbsp;ls_calc_rulset-target&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;TXT_TPM_TARGET.<br />
+*&nbsp;&nbsp;ls_calc_rulset-id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;TXT_SET_RULES_ID.<br />
+*&nbsp;&nbsp;ls_calc_rulset-description&nbsp;=&nbsp;TXT_SET_RULES_DESC.<br />
+**&nbsp;&nbsp;ls_calc_rulset-ord&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;TXT_SET_RULES_ORDER.<br />
+*&nbsp;&nbsp;ls_calc_rulset-status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;CHK_SET_RULES_ACTIVE.<br />
+*&nbsp;&nbsp;ls_calc_rulset-master_dso&nbsp;&nbsp;=&nbsp;gv_master_dso.<br />
+*&nbsp;&nbsp;ls_calc_rulset-date_master&nbsp;=&nbsp;gv_date_master.<br />
+*&nbsp;&nbsp;APPEND&nbsp;ls_calc_rulset&nbsp;TO&nbsp;lt_calc_rulset.<br />
+*&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;ztpm_calc_rulset<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;target&nbsp;=&nbsp;TXT_TPM_TARGET<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_rule_id_act.<br />
+*&nbsp;&nbsp;MODIFY&nbsp;ztpm_calc_rulset&nbsp;FROM&nbsp;TABLE&nbsp;lt_calc_rulset.<br />
+**-------<br />
+**&nbsp;b1)&nbsp;Save&nbsp;rules:&nbsp;restrictions<br />
+**&nbsp;ZTPM_CALC_RULDEF<br />
+*&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_ruldeffil&nbsp;INTO&nbsp;ls_ruldeffil.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_ruldef-target&nbsp;=&nbsp;TXT_TPM_TARGET.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_ruldef-id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_ruldeffil-filter_id.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_ruldef-dso&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_ruldeffil-filter_src_dso.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_ruldef-iobj&nbsp;&nbsp;&nbsp;=&nbsp;ls_ruldeffil-filter_src_iobj.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_ruldef-seq&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_ruldeffil-filter_seq.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_ruldef-sign&nbsp;&nbsp;&nbsp;=&nbsp;ls_ruldeffil-filter_sign.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_ruldef-opti&nbsp;&nbsp;&nbsp;=&nbsp;ls_ruldeffil-filter_opti.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_ruldef-low&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_ruldeffil-filter_low.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_ruldef-high&nbsp;=&nbsp;ls_ruldeffil-filter_high.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_calc_ruldef&nbsp;TO&nbsp;lt_calc_ruldef.<br />
+*<br />
+*&nbsp;&nbsp;ENDLOOP.<br />
+*&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;ztpm_calc_ruldef<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;target&nbsp;=&nbsp;TXT_TPM_TARGET<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_rule_id_act.<br />
+*&nbsp;&nbsp;MODIFY&nbsp;ztpm_calc_ruldef&nbsp;FROM&nbsp;TABLE&nbsp;lt_calc_ruldef.<br />
+**&nbsp;c1)&nbsp;Save&nbsp;rules:&nbsp;calculation<br />
+**&nbsp;ZTPM_CALC_RULRUL,&nbsp;ZTPM_CALC_RULFML,&nbsp;ZTPM_CALC_RULFIL<br />
+*&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_rulrul&nbsp;INTO&nbsp;ls_rulrul.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_rulrul-formula&nbsp;IS&nbsp;INITIAL.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulrul-target&nbsp;=&nbsp;TXT_TPM_TARGET.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulrul-id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_rulrul-filter_id.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulrul-iobj&nbsp;&nbsp;&nbsp;=&nbsp;ls_rulrul-iobj.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulrul-seq&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_rulrul-seq.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'RSSM_UNIQUE_ID'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_no_srequidcheck&nbsp;=&nbsp;'X'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_uni_idc25&nbsp;=&nbsp;lv_id<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulrul-fml_id&nbsp;=&nbsp;lv_id.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;ls_rulrul-formula&nbsp;IS&nbsp;INITIAL.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BREAK-POINT.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;ls_rulrul-formula&nbsp;INTO&nbsp;ls_rulfml.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfml-fml_id&nbsp;=&nbsp;ls_calc_rulrul-fml_id.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfml-seq&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_rulfml-seq.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfml-dso&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_rulfml-dso.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;NOT&nbsp;ls_rulfml-iobj&nbsp;IS&nbsp;INITIAL.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfml-type&nbsp;&nbsp;&nbsp;=&nbsp;'I'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfml-elem&nbsp;&nbsp;&nbsp;=&nbsp;ls_rulfml-iobj.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;NOT&nbsp;ls_rulfml-constant&nbsp;IS&nbsp;INITIAL.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfml-type&nbsp;&nbsp;&nbsp;=&nbsp;'C'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfml-elem&nbsp;&nbsp;&nbsp;=&nbsp;ls_rulfml-constant.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;NOT&nbsp;ls_rulfml-operator&nbsp;IS&nbsp;INITIAL.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfml-type&nbsp;&nbsp;&nbsp;=&nbsp;'O'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfml-elem&nbsp;&nbsp;&nbsp;=&nbsp;ls_rulfml-operator.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;NOT&nbsp;ls_rulfml-param&nbsp;IS&nbsp;INITIAL.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfml-type&nbsp;&nbsp;&nbsp;=&nbsp;'P'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfml-elem&nbsp;&nbsp;&nbsp;=&nbsp;ls_rulfml-param.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;NOT&nbsp;ls_rulfml-function&nbsp;IS&nbsp;INITIAL.<br />
+*<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Be&nbsp;careful:&nbsp;new&nbsp;function&nbsp;types&nbsp;must&nbsp;not&nbsp;be<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I&nbsp;or&nbsp;C&nbsp;or&nbsp;O&nbsp;or&nbsp;P<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;functype&nbsp;FROM&nbsp;ztpm_calc_fct<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;ls_calc_rulfml-type<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;funcname&nbsp;=&nbsp;ls_rulfml-function.<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfml-type&nbsp;&nbsp;&nbsp;=&nbsp;'F'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfml-elem&nbsp;&nbsp;&nbsp;=&nbsp;ls_rulfml-function.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;ls_rulfml-filter&nbsp;INTO&nbsp;ls_rulfil.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfil-fml_id&nbsp;&nbsp;=&nbsp;ls_calc_rulfml-fml_id.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfil-seq_fml&nbsp;=&nbsp;ls_calc_rulfml-seq.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfil-dso&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_rulfil-dso.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfil-iobj&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_rulfil-iobj.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfil-seq_fil&nbsp;=&nbsp;ls_rulfil-seq.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfil-sign&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_rulfil-sign.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfil-opti&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_rulfil-opti.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfil-low&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_rulfil-low.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulfil-high&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ls_rulfil-high.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_calc_rulfil&nbsp;TO&nbsp;lt_calc_rulfil.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_calc_rulfml&nbsp;TO&nbsp;lt_calc_rulfml.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_calc_rulrul&nbsp;TO&nbsp;lt_calc_rulrul.<br />
+*<br />
+*&nbsp;&nbsp;ENDLOOP.<br />
+*&nbsp;&nbsp;lrs_fml-sign&nbsp;&nbsp;&nbsp;=&nbsp;'I'.<br />
+*&nbsp;&nbsp;lrs_fml-option&nbsp;=&nbsp;'EQ'.<br />
+*&nbsp;&nbsp;SELECT&nbsp;fml_id&nbsp;FROM&nbsp;ztpm_calc_rulrul<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lrs_fml-low<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;target&nbsp;=&nbsp;TXT_TPM_TARGET<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_rule_id_act.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;lrs_fml&nbsp;TO&nbsp;lrt_fml.<br />
+*<br />
+*&nbsp;&nbsp;ENDSELECT.<br />
+*&nbsp;&nbsp;IF&nbsp;lrt_fml&nbsp;IS&nbsp;INITIAL.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;ztpm_calc_rulfml&nbsp;WHERE&nbsp;fml_id&nbsp;IN&nbsp;lrt_fml.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;ztpm_calc_rulfil&nbsp;WHERE&nbsp;fml_id&nbsp;IN&nbsp;lrt_fml.<br />
+*<br />
+*&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;ztpm_calc_rulrul<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;target&nbsp;=&nbsp;TXT_TPM_TARGET<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_rule_id_act.<br />
+*&nbsp;&nbsp;MODIFY&nbsp;ztpm_calc_rulrul&nbsp;FROM&nbsp;TABLE&nbsp;lt_calc_rulrul.<br />
+*&nbsp;&nbsp;MODIFY&nbsp;ztpm_calc_rulfml&nbsp;FROM&nbsp;TABLE&nbsp;lt_calc_rulfml.<br />
+*&nbsp;&nbsp;MODIFY&nbsp;ztpm_calc_rulfil&nbsp;FROM&nbsp;TABLE&nbsp;lt_calc_rulfil.<br />
+**&nbsp;d1)&nbsp;Save&nbsp;rules:&nbsp;links<br />
+**&nbsp;ZTPM_CALC_RULLNK<br />
+*&nbsp;&nbsp;IF&nbsp;NOT&nbsp;gi_nt_rullnk_grp&nbsp;IS&nbsp;INITIAL.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;links_organize.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;gi_nt_rullnk_grp-&gt;get_all_links<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re_t_links&nbsp;=&nbsp;lt_links.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_links&nbsp;INTO&nbsp;ls_link.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ztpm_calc_rullnk-target&nbsp;=&nbsp;TXT_TPM_TARGET.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ztpm_calc_rullnk-id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_rule_id_act.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_link-r_link-&gt;get_predecessor(&nbsp;IMPORTING&nbsp;e_r_table&nbsp;&nbsp;=&nbsp;lc_table<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_rowindex&nbsp;=&nbsp;lv_row&nbsp;).<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lc_table-&gt;get_tabledata(&nbsp;IMPORTING&nbsp;e_t_tabledata&nbsp;=&nbsp;lt_rullnk_dso_tbl&nbsp;).<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_rullnk_dso_tbl&nbsp;INTO&nbsp;ls_rullnk_dso_tbl<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;lv_row.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ztpm_calc_rullnk-dso_pred&nbsp;&nbsp;=&nbsp;ls_rullnk_dso_tbl-dso.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ztpm_calc_rullnk-iobj_pred&nbsp;=&nbsp;ls_rullnk_dso_tbl-iobj.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_link-r_link-&gt;get_successor(&nbsp;IMPORTING&nbsp;e_r_table&nbsp;&nbsp;=&nbsp;lc_table<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_rowindex&nbsp;=&nbsp;lv_row&nbsp;).<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lc_table-&gt;get_tabledata(&nbsp;IMPORTING&nbsp;e_t_tabledata&nbsp;=&nbsp;lt_rullnk_dso_tbl&nbsp;).<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_rullnk_dso_tbl&nbsp;INTO&nbsp;ls_rullnk_dso_tbl<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;lv_row.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ztpm_calc_rullnk-dso_succ&nbsp;&nbsp;=&nbsp;ls_rullnk_dso_tbl-dso.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ztpm_calc_rullnk-iobj_succ&nbsp;=&nbsp;ls_rullnk_dso_tbl-iobj.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_ztpm_calc_rullnk&nbsp;TO&nbsp;lt_ztpm_calc_rullnk.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;DELETE&nbsp;FROM&nbsp;ztpm_calc_rullnk<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;target&nbsp;=&nbsp;TXT_TPM_TARGET<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gv_rule_id_act.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;ztpm_calc_rullnk&nbsp;FROM&nbsp;TABLE&nbsp;lt_ztpm_calc_rullnk.<br />
+*<br />
+*&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;CLEAR&nbsp;gv_edit_status.<br />
+*&nbsp;&nbsp;MESSAGE&nbsp;I605(01).<br />
+<br />
+   </div>
+   <div class="code">
+ENDFORM.<br />
+<br />
+FORM convert_links CHANGING pt_links TYPE rsng_t_links<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pt_calc_links&nbsp;TYPE&nbsp;ztpm_calc_links.<br />
+<br />
+&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_rullnk_dso_tbl&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;tp_rullnk_dso_tbl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rullnk_dso_tbl&nbsp;&nbsp;&nbsp;TYPE&nbsp;tp_rullnk_dso_tbl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;li_table&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;if_rsnetgraphic_table,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_row&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rsng_rownr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_links&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rsng_t_links,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_link&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;rsng_s_links,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_link&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ztpm_calc_link.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;pt_links&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;gi_nt_rullnk_grp-&gt;get_all_links<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re_t_links&nbsp;=&nbsp;lt_links.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;pt_links[]&nbsp;=&nbsp;lt_links[].<br />
+<br />
+&nbsp;&nbsp;ELSE.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;lt_links[]&nbsp;=&nbsp;pt_links[].<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_links&nbsp;INTO&nbsp;ls_link.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_link-r_link-&gt;get_predecessor(&nbsp;IMPORTING&nbsp;e_r_table&nbsp;&nbsp;=&nbsp;li_table<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_rowindex&nbsp;=&nbsp;lv_row&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;li_table-&gt;get_tabledata(&nbsp;IMPORTING&nbsp;e_t_tabledata&nbsp;=&nbsp;lt_rullnk_dso_tbl&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_rullnk_dso_tbl&nbsp;INTO&nbsp;ls_rullnk_dso_tbl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;lv_row.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_link-dso_pred&nbsp;&nbsp;=&nbsp;ls_rullnk_dso_tbl-dso.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_link-iobj_pred&nbsp;=&nbsp;ls_rullnk_dso_tbl-iobj.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_link-r_link-&gt;get_successor(&nbsp;IMPORTING&nbsp;e_r_table&nbsp;&nbsp;=&nbsp;li_table<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e_rowindex&nbsp;=&nbsp;lv_row&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;li_table-&gt;get_tabledata(&nbsp;IMPORTING&nbsp;e_t_tabledata&nbsp;=&nbsp;lt_rullnk_dso_tbl&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_rullnk_dso_tbl&nbsp;INTO&nbsp;ls_rullnk_dso_tbl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;lv_row.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_link-dso_succ&nbsp;&nbsp;=&nbsp;ls_rullnk_dso_tbl-dso.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_link-iobj_succ&nbsp;=&nbsp;ls_rullnk_dso_tbl-iobj.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_calc_link&nbsp;TO&nbsp;pt_calc_links.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.<br />
+<br />
+FORM load_db.<br />
+<br />
+&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_calc_rulset&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ztpm_calc_rulset,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_calc_rulset&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ztpm_calc_rulset,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rulset_gr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;tp_rulset_gr.<br />
+<br />
+&nbsp;&nbsp;SELECT&nbsp;*&nbsp;FROM&nbsp;ztpm_calc_rulset<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;lt_calc_rulset<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;target&nbsp;=&nbsp;TXT_TPM_TARGET.<br />
+&nbsp;&nbsp;CLEAR&nbsp;gt_rulset_gr[].<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;lt_calc_rulset&nbsp;INTO&nbsp;ls_calc_rulset.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rulset_gr-filter_id&nbsp;=&nbsp;ls_calc_rulset-id.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rulset_gr-filter_order&nbsp;=&nbsp;ls_calc_rulset-ord.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rulset_gr-filter_description&nbsp;=&nbsp;ls_calc_rulset-description.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rulset_gr&nbsp;TO&nbsp;gt_rulset_gr.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;c_gr_target_rulset-&gt;refresh_table_display(&nbsp;).<br />
+<br />
+ENDFORM.<br />
+<br />
+FORM copy_rule USING ps_rulrul TYPE tp_rulrul.<br />
+<br />
+&nbsp;&nbsp;DATA:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_ret&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ddshretval,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_ret&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;ddshretval,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_dso_iobj&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;tp_dso_iobj,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rulrultgt&nbsp;&nbsp;TYPE&nbsp;tp_rulrul,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rulrul_gr&nbsp;&nbsp;TYPE&nbsp;tp_rulrul_gr.<br />
+<br />
+&nbsp;&nbsp;lt_dso_iobj[]&nbsp;=&nbsp;gt_target_structure[].<br />
+&nbsp;&nbsp;DELETE&nbsp;lt_dso_iobj&nbsp;WHERE&nbsp;iobjnm&nbsp;=&nbsp;ps_rulrul-iobj.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'F4IF_INT_TABLE_VALUE_REQUEST'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retfield&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'IOBJNM'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window_title&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'Choose&nbsp;the&nbsp;target&nbsp;infoobject'(251)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value_org&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'S'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_dso_iobj[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return_tab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_ret[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameter_error&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_values_found&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;lt_ret&nbsp;INTO&nbsp;ls_ret&nbsp;INDEX&nbsp;1.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;gt_rulrul_gr&nbsp;INTO&nbsp;ls_rulrul_gr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;KEY&nbsp;iobj&nbsp;=&nbsp;ls_ret-fieldval.&nbsp;"ls_rulrultgt-iobj.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;=&nbsp;0.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_rulrul_gr-icon&nbsp;=&nbsp;ICON_CHANGE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;gt_rulrul_gr&nbsp;FROM&nbsp;ls_rulrul_gr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INDEX&nbsp;sy-tabix.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rulrultgt&nbsp;=&nbsp;ps_rulrul.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rulrultgt-iobj&nbsp;=&nbsp;ls_ret-fieldval.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ls_rulrultgt-seq&nbsp;&nbsp;=&nbsp;ls_rulrul_gr-seq.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;ls_rulrultgt&nbsp;TO&nbsp;gt_rulrul.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM. "copy_rule<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2021. Sap Release 750</td>
+   </tr>
+</table>
+</body>
+</html>

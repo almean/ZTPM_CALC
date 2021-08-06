@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZTPM_CALC_HTML</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZTPM_CALC_HTML</h2>
+<h3> Description: TPM Value Calculator Rule as HTML</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="code">
+&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"&gt;<br />
+&lt;xsl:output doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" encoding="utf-8" method="html"/&gt;<br />
+&lt;xsl:template match="/"&gt;<br />
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;<br />
+&lt;head&gt;<br />
+&lt;style&gt;<br />
+h1 {<br />
+color: #5F5046;<br />
+font-family: Verdana, Geneva, sans-serif;<br />
+border-bottom: 3px solid #5F5046;<br />
+padding-bottom: 6px;<br />
+}<br />
+h2 {<br />
+color: #877873;<br />
+font-family: Verdana, Geneva, sans-serif;<br />
+margin-top: 0;<br />
+margin-bottom: 10px;<br />
+margin-left: 0;<br />
+margin-right: 0;<br />
+}<br />
+p {<br />
+display: block;<br />
+margin-top: 0;<br />
+margin-bottom: 0;<br />
+margin-left: 0;<br />
+margin-right: 0;<br />
+font-family: Arial, sans-serif;<br />
+border-style: solid;<br />
+border-width: 0px;<br />
+border-bottom-width: 1px;<br />
+font-weight: normal;<br />
+padding: 4px 4px;<br />
+}<br />
+h3 {<br />
+font-family: Arial, sans-serif;<br />
+font-size: 14px;<br />
+padding-bottom: 5px;<br />
+border-style: solid;<br />
+border-width: 0px;<br />
+overflow: hidden;<br />
+word-break: normal;<br />
+border-bottom-width: 1px;<br />
+font-weight: normal;<br />
+}<br />
+.tg {<br />
+border-collapse: collapse;<br />
+border-spacing: 0;<br />
+margin-bottom: 10px;<br />
+}<br />
+.tg td {<br />
+font-family: Arial, sans-serif;<br />
+font-size: 14px;<br />
+padding: 10px 5px;<br />
+border-style: solid;<br />
+border-width: 0px;<br />
+overflow: hidden;<br />
+word-break: normal;<br />
+border-top-width: 1px;<br />
+border-bottom-width: 1px;<br />
+}<br />
+.tg .tg-tw {<br />
+vertical-align: top;<br />
+color: #FFF;<br />
+border-color: #000;<br />
+}<br />
+.tg .tg-t {<br />
+vertical-align: top;<br />
+}<br />
+&lt;/style&gt;<br />
+&lt;meta content="text/html; charset=utf-8" http-equiv="Content-Type"/&gt;<br />
+&lt;title&gt;<br />
+&lt;xsl:value-of select="RULE/DESCRIPTION"/&gt;<br />
+&lt;xsl:text&gt; [&lt;/xsl:text&gt;<br />
+&lt;xsl:value-of select="RULE/ID"/&gt;<br />
+&lt;xsl:text&gt;]&lt;/xsl:text&gt;<br />
+&lt;/title&gt;<br />
+&lt;/head&gt;<br />
+&lt;body&gt;<br />
+&lt;h1&gt;<br />
+&lt;xsl:value-of select="RULE/DESCRIPTION"/&gt;<br />
+&lt;/h1&gt;<br />
+&lt;table&gt;<br />
+&lt;tr&gt;<br />
+&lt;td&gt;<br />
+&lt;xsl:attribute name="nowrap"&gt;<br />
+nowrap<br />
+&lt;/xsl:attribute&gt;<br />
+&lt;h3&gt;<br />
+&lt;xsl:text&gt;Technical name &lt;/xsl:text&gt;<br />
+&lt;b&gt;<br />
+&lt;xsl:value-of select="RULE/ID"/&gt;<br />
+&lt;/b&gt;<br />
+&lt;/h3&gt;<br />
+&lt;/td&gt;<br />
+&lt;/tr&gt;<br />
+&lt;tr&gt;<br />
+&lt;td&gt;<br />
+&lt;xsl:attribute name="nowrap"&gt;<br />
+nowrap<br />
+&lt;/xsl:attribute&gt;<br />
+&lt;h3&gt;<br />
+&lt;xsl:text&gt;<br />
+Target&#160;<br />
+&lt;/xsl:text&gt;<br />
+&lt;b&gt;<br />
+&lt;xsl:value-of select="RULE/TARGET"/&gt;<br />
+&lt;/b&gt;<br />
+&lt;xsl:text&gt;<br />
+&#160;|&#160;Master&#160;DSO&#160;<br />
+&lt;/xsl:text&gt;<br />
+&lt;b&gt;<br />
+&lt;xsl:value-of select="RULE/MASTER_DSO"/&gt;<br />
+&lt;/b&gt;<br />
+&lt;/h3&gt;<br />
+&lt;/td&gt;<br />
+&lt;/tr&gt;<br />
+&lt;/table&gt;<br />
+&lt;h2&gt;Restrictions&lt;/h2&gt;<br />
+&lt;table&gt;<br />
+&lt;xsl:attribute name="class"&gt;<br />
+tg<br />
+&lt;/xsl:attribute&gt;<br />
+&lt;xsl:for-each select="RULE/RESTRICTIONS/ZTPM_CALC_RESTRICTION"&gt;<br />
+&lt;tr&gt;<br />
+&lt;td&gt;<br />
+&lt;xsl:attribute name="class"&gt;<br />
+tg-t<br />
+&lt;/xsl:attribute&gt;<br />
+&lt;xsl:value-of select="DSO"/&gt;<br />
+&lt;xsl:text&gt;<br />
+-<br />
+&lt;/xsl:text&gt;<br />
+&lt;xsl:value-of select="IOBJ"/&gt;<br />
+&lt;/td&gt;<br />
+&lt;td&gt;<br />
+&lt;xsl:attribute name="class"&gt;<br />
+tg-tw<br />
+&lt;/xsl:attribute&gt;<br />
+&lt;xsl:for-each select="SELECTIONS/ZTPM_CALC_SELECTION"&gt;<br />
+&lt;p&gt;<br />
+&lt;xsl:attribute name="style"&gt;background-color:#093&lt;/xsl:attribute&gt;<br />
+&lt;xsl:if test="SIGN='E'"&gt;<br />
+&lt;xsl:attribute name="style"&gt;background-color:#F00&lt;/xsl:attribute&gt;<br />
+&lt;/xsl:if&gt;<br />
+&lt;xsl:if test="OPTION='BT'"&gt;<br />
+&lt;xsl:text&gt;<br />
+Between&#160;<br />
+&lt;/xsl:text&gt;<br />
+&lt;xsl:value-of select="LOW"/&gt;<br />
+&lt;xsl:text&gt;<br />
+&#160;and&#160;<br />
+&lt;/xsl:text&gt;<br />
+&lt;xsl:value-of select="HIGH"/&gt;<br />
+&lt;/xsl:if&gt;<br />
+&lt;xsl:if test="OPTION='EQ'"&gt;<br />
+&lt;xsl:text&gt;<br />
+Equal&#160;to&#160;<br />
+&lt;/xsl:text&gt;<br />
+&lt;xsl:value-of select="LOW"/&gt;<br />
+&lt;/xsl:if&gt;<br />
+&lt;xsl:if test="OPTION='CP'"&gt;<br />
+&lt;xsl:text&gt;<br />
+Contains&#160;<br />
+&lt;/xsl:text&gt;<br />
+&lt;xsl:value-of select="LOW"/&gt;<br />
+&lt;/xsl:if&gt;<br />
+&lt;/p&gt;<br />
+&lt;/xsl:for-each&gt;<br />
+&lt;/td&gt;<br />
+&lt;/tr&gt;<br />
+&lt;/xsl:for-each&gt;<br />
+&lt;/table&gt;<br />
+&lt;h2&gt;Calculations&lt;/h2&gt;<br />
+&lt;table&gt;<br />
+&lt;xsl:attribute name="class"&gt;<br />
+tg<br />
+&lt;/xsl:attribute&gt;<br />
+&lt;xsl:for-each select="RULE/CALCULATIONS/ZTPM_CALC_CALCULATION"&gt;<br />
+&lt;tr&gt;<br />
+&lt;xsl:attribute name="class"&gt;<br />
+tg-t<br />
+&lt;/xsl:attribute&gt;<br />
+&lt;td&gt;<br />
+&lt;xsl:value-of select="IOBJ"/&gt;<br />
+&lt;/td&gt;<br />
+&lt;td&gt;<br />
+&lt;xsl:text&gt;=&lt;/xsl:text&gt;<br />
+&lt;/td&gt;<br />
+&lt;td&gt;<br />
+&lt;xsl:for-each select="FORMULA/ZTPM_CALC_FORMULA_ELEMENT"&gt;<br />
+&lt;xsl:choose&gt;<br />
+&lt;xsl:when test="TYPE='I'"&gt;<br />
+&lt;b&gt;<br />
+&lt;xsl:value-of select="DSO"/&gt;<br />
+&lt;xsl:text&gt;-&lt;/xsl:text&gt;<br />
+&lt;xsl:value-of select="ELEMENT"/&gt;<br />
+&lt;/b&gt;<br />
+&lt;i&gt;<br />
+&lt;xsl:for-each select="RESTRICTIONS/ZTPM_CALC_RESTRICTION"&gt;<br />
+&lt;xsl:choose&gt;<br />
+&lt;xsl:when test="position()=1"&gt;<br />
+&lt;xsl:text&gt;<br />
+&#160;{When&#160;<br />
+&lt;/xsl:text&gt;<br />
+&lt;/xsl:when&gt;<br />
+&lt;xsl:otherwise&gt;<br />
+&lt;xsl:text&gt;<br />
+&#160;and&#160;<br />
+&lt;/xsl:text&gt;<br />
+&lt;/xsl:otherwise&gt;<br />
+&lt;/xsl:choose&gt;<br />
+&lt;xsl:value-of select="DSO"/&gt;<br />
+&lt;xsl:text&gt;-&lt;/xsl:text&gt;<br />
+&lt;xsl:value-of select="IOBJ"/&gt;<br />
+&lt;xsl:for-each select="SELECTIONS/ZTPM_CALC_SELECTION"&gt;<br />
+&lt;span&gt;<br />
+&lt;xsl:if test="SIGN='E'"&gt;<br />
+&lt;xsl:attribute name="style"&gt;background-color:#F00&lt;/xsl:attribute&gt;<br />
+&lt;/xsl:if&gt;<br />
+&lt;xsl:choose&gt;<br />
+&lt;xsl:when test="OPTION='EQ'"&gt;<br />
+&lt;xsl:text&gt;=&lt;/xsl:text&gt;<br />
+&lt;xsl:value-of select="LOW"/&gt;<br />
+&lt;/xsl:when&gt;<br />
+&lt;xsl:when test="OPTION='NE'"&gt;<br />
+&lt;xsl:text&gt;<br />
+&#160;&lt;&gt;&#160;<br />
+&lt;/xsl:text&gt;<br />
+&lt;xsl:value-of select="LOW"/&gt;<br />
+&lt;/xsl:when&gt;<br />
+&lt;xsl:when test="OPTION='LT'"&gt;<br />
+&lt;xsl:text&gt;<br />
+&#160;&lt;&#160;<br />
+&lt;/xsl:text&gt;<br />
+&lt;xsl:value-of select="LOW"/&gt;<br />
+&lt;/xsl:when&gt;<br />
+&lt;xsl:when test="OPTION='GT'"&gt;<br />
+&lt;xsl:text&gt;<br />
+&#160;&gt;&#160;<br />
+&lt;/xsl:text&gt;<br />
+&lt;xsl:value-of select="LOW"/&gt;<br />
+&lt;/xsl:when&gt;<br />
+&lt;xsl:when test="OPTION='BT'"&gt;<br />
+&lt;xsl:text&gt;<br />
+&#160;between&#160;<br />
+&lt;/xsl:text&gt;<br />
+&lt;xsl:value-of select="LOW"/&gt;<br />
+&lt;xsl:text&gt;<br />
+&#160;and&#160;<br />
+&lt;/xsl:text&gt;<br />
+&lt;xsl:value-of select="HIGH"/&gt;<br />
+&lt;/xsl:when&gt;<br />
+&lt;xsl:otherwise&gt;<br />
+&lt;xsl:value-of select="OPTION"/&gt;<br />
+&lt;/xsl:otherwise&gt;<br />
+&lt;/xsl:choose&gt;<br />
+&lt;/span&gt;<br />
+&lt;/xsl:for-each&gt;<br />
+&lt;xsl:if test="position()=last()"&gt;<br />
+&lt;xsl:text&gt;<br />
+}<br />
+&lt;/xsl:text&gt;<br />
+&lt;/xsl:if&gt;<br />
+&lt;/xsl:for-each&gt;<br />
+&lt;/i&gt;<br />
+&lt;/xsl:when&gt;<br />
+&lt;xsl:when test="TYPE='I'"&gt;<br />
+&lt;xsl:value-of select="ELEMENT"/&gt;<br />
+&lt;/xsl:when&gt;<br />
+&lt;xsl:otherwise&gt;<br />
+&lt;xsl:value-of select="ELEMENT"/&gt;<br />
+&lt;/xsl:otherwise&gt;<br />
+&lt;/xsl:choose&gt;<br />
+&lt;/xsl:for-each&gt;<br />
+&lt;/td&gt;<br />
+&lt;/tr&gt;<br />
+&lt;/xsl:for-each&gt;<br />
+&lt;/table&gt;<br />
+&lt;h2&gt;<br />
+Links<br />
+&lt;/h2&gt;<br />
+&lt;table&gt;<br />
+&lt;xsl:attribute name="class"&gt;<br />
+tg<br />
+&lt;/xsl:attribute&gt;<br />
+&lt;xsl:for-each select="RULE/LINKS/ZTPM_CALC_LINK"&gt;<br />
+&lt;tr&gt;<br />
+&lt;td&gt;<br />
+&lt;xsl:attribute name="class"&gt;<br />
+tg-t<br />
+&lt;/xsl:attribute&gt;<br />
+&lt;xsl:value-of select="DSO_PRED"/&gt;<br />
+&lt;xsl:text&gt;<br />
+-<br />
+&lt;/xsl:text&gt;<br />
+&lt;xsl:value-of select="IOBJ_PRED"/&gt;<br />
+&lt;/td&gt;<br />
+&lt;td&gt;<br />
+&lt;xsl:attribute name="class"&gt;<br />
+tg-t<br />
+&lt;/xsl:attribute&gt;<br />
+&lt;xsl:text&gt;<br />
+&lt;--&gt;<br />
+&lt;/xsl:text&gt;<br />
+&lt;/td&gt;<br />
+&lt;td&gt;<br />
+&lt;xsl:attribute name="class"&gt;<br />
+tg-t<br />
+&lt;/xsl:attribute&gt;<br />
+&lt;xsl:value-of select="DSO_SUCC"/&gt;<br />
+&lt;xsl:text&gt;<br />
+-<br />
+&lt;/xsl:text&gt;<br />
+&lt;xsl:value-of select="IOBJ_SUCC"/&gt;<br />
+&lt;/td&gt;<br />
+&lt;/tr&gt;<br />
+&lt;/xsl:for-each&gt;<br />
+&lt;/table&gt;<br />
+&lt;/body&gt;<br />
+&lt;/html&gt;<br />
+&lt;/xsl:template&gt;<br />
+&lt;/xsl:stylesheet&gt;<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2021. Sap Release 750</td>
+   </tr>
+</table>
+</body>
+</html>
